@@ -3,13 +3,15 @@
  * All rights reserved.
  */
 
-import solutions.AbstractSolution;
+import solutions.SolutionList;
+import solutions.Solutions2019;
 
 public class AdventRunner {
 
     public static void main(String[] args) {
 
-        AbstractSolution.test();
-        System.out.println("test");
+        final SolutionList solutionList = new Solutions2019();
+
+        solutionList.runAll();
     }
 }
