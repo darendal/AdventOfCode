@@ -1,0 +1,4 @@
+rootProject.name = 'AdventOfCode'
+include 'AdventRunner'
+include 'CommonAdvent'
+
