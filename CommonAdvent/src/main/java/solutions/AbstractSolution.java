@@ -5,13 +5,11 @@
 
 package solutions;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
+import java.util.stream.Collectors;
 
 public class AbstractSolution {
 
@@ -33,34 +31,20 @@ public class AbstractSolution {
 
     protected List<String> getInput(final String filename) throws IllegalArgumentException {
 
-        final File file = getFileFromResources(filename);
+        InputStream i = ClassLoader.getSystemResourceAsStream(filename);
 
-        try {
-            return FileUtils.readLines(file, Charset.defaultCharset());
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("File does not exist");
+        if (i == null) {
+            throw new IllegalArgumentException("file not found");
         }
 
-    }
+        BufferedReader r = new BufferedReader(new InputStreamReader(i));
 
-    private File getFileFromResources(final String fileName) {
-
-        ClassLoader classLoader = getClass().getClassLoader();
-
-        URL resource = classLoader.getResource(fileName);
-        if (resource == null) {
-            throw new IllegalArgumentException("file is not found!");
-        } else {
-            return new File(resource.getFile());
-        }
+        return r.lines().collect(Collectors.toList());
 
     }
 
     protected <T> void printResult(final T result) {
         System.out.println(String.format("Answer is %s", result));
     }
-
-
 
 }
