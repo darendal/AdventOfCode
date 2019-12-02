@@ -29,9 +29,9 @@ public class AbstractSolution {
         System.out.println(String.format("\n\n====== Running Solution #%s for day %s ======\n\n", solutionNumber, dayNumber));
     }
 
-    protected List<String> getInput(final String filename) throws IllegalArgumentException {
+    protected List<String> getInput(final String filename, Class clazz) throws IllegalArgumentException {
 
-        InputStream i = ClassLoader.getSystemResourceAsStream(filename);
+        InputStream i = clazz.getClassLoader().getSystemResourceAsStream(filename);
 
         if (i == null) {
             throw new IllegalArgumentException("file not found");

@@ -37,7 +37,7 @@ public class Solution1 extends AbstractSolution {
     }
 
     int[] getProgram() {
-        String input = this.getInput(INPUT_FILENAME).get(0);
+        String input = this.getInput(INPUT_FILENAME, this.getClass()).get(0);
         return Arrays.stream(input.split(",")).mapToInt(Integer::parseInt).toArray();
     }
 
