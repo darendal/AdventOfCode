@@ -2,4 +2,5 @@ rootProject.name = 'AdventOfCode'
 include 'AdventRunner'
 include 'CommonAdvent'
 include 'AdventOfCode2019'
+include 'AdventOfCode2018'
 
