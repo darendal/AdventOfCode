@@ -8,6 +8,7 @@ package solutions;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,4 +48,8 @@ public class AbstractSolution {
         System.out.println(String.format("Answer is %s", result));
     }
 
+    protected int[] getIntCodeProgram(String filename, Class clazz) {
+        String input = this.getInput(filename, clazz).get(0);
+        return Arrays.stream(input.split(",")).mapToInt(Integer::parseInt).toArray();
+    }
 }

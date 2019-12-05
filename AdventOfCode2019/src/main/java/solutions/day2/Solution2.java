@@ -5,6 +5,8 @@
 
 package solutions.day2;
 
+import solutions.helpers.IntCode;
+
 public class Solution2 extends Solution1 {
     private static final int EXPECTED_OUTPUT = 19690720;
 
@@ -16,15 +18,13 @@ public class Solution2 extends Solution1 {
     public void run() {
         this.printSolutionHeader();
 
-        final int[] memory = getProgram();
+        final int[] memory = this.getProgram();
 
         for (int noun = 0; noun <= 99; noun++) {
             for (int verb = 0; verb <= 99; verb++) {
                 int[] program = memory.clone();
-                program[1] = noun;
-                program[2] = verb;
 
-                program = this.processIntcodeProgram(program);
+                program = new IntCode(program).processIntcodeProgram(noun, verb);
 
                 if (program[0] == EXPECTED_OUTPUT) {
                     this.printResult((100 * noun) + verb);
