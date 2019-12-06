@@ -27,6 +27,6 @@ public class AbstractSolutionList implements SolutionList {
 
     @Override
     public void runSingleDay(int day) {
-
+        solutionList.stream().filter(s -> s.getDayNumber() == day).forEach(AbstractSolution::run);
     }
 }

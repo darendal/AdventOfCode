@@ -52,4 +52,8 @@ public class AbstractSolution {
         String input = this.getInput(filename, clazz).get(0);
         return Arrays.stream(input.split(",")).mapToInt(Integer::parseInt).toArray();
     }
+
+    public int getDayNumber() {
+        return this.dayNumber;
+    }
 }
