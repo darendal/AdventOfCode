@@ -13,6 +13,7 @@ public class IntCode {
 
     private int[] program;
     private Stack<Integer> input;
+    private Stack<Integer> output;
     private int programCounter;
 
     public IntCode(int[] program, int[] input) {
@@ -27,6 +28,7 @@ public class IntCode {
         this.program = program;
         this.programCounter = 0;
         this.input = new Stack<>();
+        this.output = new Stack<>();
     }
 
     public int[] processIntcodeProgram() {
@@ -71,6 +73,10 @@ public class IntCode {
         program[2] = verb;
 
         return processIntcodeProgram();
+    }
+
+    public Stack<Integer> getOutput() {
+        return this.output;
     }
 
     private void addOpCode(int startPosition) {
@@ -123,7 +129,8 @@ public class IntCode {
     private void output(int startPosition) {
 
         int index = getValues(program[programCounter], new int[]{program[startPosition + 1]})[0];
-        System.out.println(index);
+
+        this.output.push(index);
 
         programCounter += 2;
     }

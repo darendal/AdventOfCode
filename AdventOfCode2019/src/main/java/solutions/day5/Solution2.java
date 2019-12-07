@@ -22,5 +22,10 @@ public class Solution2 extends Solution1 {
         final IntCode ic = new IntCode(program, INPUT);
 
         ic.processIntcodeProgram();
+
+        int result = ic.getOutput().pop();
+
+        this.printResult(result);
+
     }
 }

@@ -31,5 +31,9 @@ public class Solution1 extends AbstractSolution {
 
         ic.processIntcodeProgram();
 
+        int result = ic.getOutput().pop();
+
+        this.printResult(result);
+
     }
 }

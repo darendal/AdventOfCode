@@ -8,6 +8,7 @@ package solutions;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,10 @@ public class AbstractSolution {
 
     public void run() {
         this.printSolutionHeader();
+    }
+
+    public int getDayNumber() {
+        return this.dayNumber;
     }
 
     protected void printSolutionHeader() {
@@ -53,7 +58,31 @@ public class AbstractSolution {
         return Arrays.stream(input.split(",")).mapToInt(Integer::parseInt).toArray();
     }
 
-    public int getDayNumber() {
-        return this.dayNumber;
+    protected List<List<Integer>> permute(int[] arr) {
+        List<List<Integer>> list = new ArrayList<>();
+        permuteHelper(list, new ArrayList<>(), arr);
+        return list;
+    }
+
+    private void permuteHelper(List<List<Integer>> list, List<Integer> resultList, int[] arr) {
+
+        // Base case
+        if (resultList.size() == arr.length) {
+            list.add(new ArrayList<>(resultList));
+        } else {
+            for (int value : arr) {
+
+                if (resultList.contains(value)) {
+                    // If element already exists in the list then skip
+                    continue;
+                }
+                // Choose element
+                resultList.add(value);
+                // Explore
+                permuteHelper(list, resultList, arr);
+                // Unchoose element
+                resultList.remove(resultList.size() - 1);
+            }
+        }
     }
 }
