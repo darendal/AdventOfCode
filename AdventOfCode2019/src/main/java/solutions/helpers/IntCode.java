@@ -11,10 +11,13 @@ import java.util.Stack;
 
 public class IntCode {
 
-    private int[] program;
+    int[] program;
     private Stack<Integer> input;
     private Stack<Integer> output;
-    private int programCounter;
+    int programCounter;
+
+    IntCode() {
+    }
 
     public IntCode(int[] program, int[] input) {
         this(program);
@@ -116,7 +119,7 @@ public class IntCode {
         programCounter += 4;
     }
 
-    private void input(int startPosition) {
+    void input(int startPosition) {
 
         int inputValue = this.input.pop();
         int index = this.program[startPosition + 1];
@@ -126,7 +129,7 @@ public class IntCode {
         programCounter += 2;
     }
 
-    private void output(int startPosition) {
+    void output(int startPosition) {
 
         int index = getValues(program[programCounter], new int[]{program[startPosition + 1]})[0];
 
@@ -186,7 +189,7 @@ public class IntCode {
         programCounter += 4;
     }
 
-    private int[] getValues(int opCode, int[] parameters) {
+    int[] getValues(int opCode, int[] parameters) {
 
         char[] paramMode = (opCode + "").toCharArray();
 
