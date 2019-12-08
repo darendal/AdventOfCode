@@ -23,16 +23,10 @@ public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
 
     @Override
     void input(int startPosition) {
-        int inputValue = 0;
-        try {
 
-            inputValue = this.input.consume();
-        } catch (NullPointerException e) {
-            program[startPosition] = 99;
-            return;
-        }
+        final int inputValue = this.input.consume();
 
-        int index = this.program[startPosition + 1];
+        final int index = this.program[startPosition + 1];
 
         this.program[index] = inputValue;
 
@@ -49,7 +43,7 @@ public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
     }
 
     @Override
-    public Integer call() throws Exception {
+    public Integer call() {
         this.processIntcodeProgram();
 
         return 0;
