@@ -3,22 +3,26 @@
  * All rights reserved.
  */
 
-package solutions.day5;
+package solutions.day9;
+
+import java.util.Stack;
 
 import solutions.AbstractSolution;
 import solutions.helpers.IntCode;
 
 public class Solution1 extends AbstractSolution {
 
-    static final String INPUT_FILENAME = "Input5";
-    private static final long[] INPUT = {1};
+    private static final String INPUT_FILENAME = "Input9";
+    private final long input;
 
     public Solution1() {
-        this(1);
+        this(1, 1);
+
     }
 
-    Solution1(int solutionNumber) {
-        super(solutionNumber, 5);
+    Solution1(int solutionNumber, int input) {
+        super(solutionNumber, 9);
+        this.input = input;
     }
 
     @Override
@@ -27,13 +31,12 @@ public class Solution1 extends AbstractSolution {
 
         long[] program = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
 
-        final IntCode ic = new IntCode(program, INPUT);
+        final IntCode ic = new IntCode(program, new long[]{input});
 
         ic.processIntcodeProgram();
 
-        long result = ic.getOutput().pop();
+        Stack<Long> output = ic.getOutput();
 
-        this.printResult(result);
-
+        System.out.println(output);
     }
 }

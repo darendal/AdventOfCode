@@ -11,10 +11,10 @@ import models.ProducerConsumer;
 
 public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
 
-    private ProducerConsumer<Integer> input;
-    private ProducerConsumer<Integer> output;
+    private ProducerConsumer<Long> input;
+    private ProducerConsumer<Long> output;
 
-    public ConcurrentIntCode(int[] program, final ProducerConsumer<Integer> input, final ProducerConsumer<Integer> output) {
+    public ConcurrentIntCode(long[] program, final ProducerConsumer<Long> input, final ProducerConsumer<Long> output) {
         super(program);
 
         this.input = input;
@@ -24,9 +24,9 @@ public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
     @Override
     void input(int startPosition) {
 
-        final int inputValue = this.input.consume();
+        final long inputValue = this.input.consume();
 
-        final int index = this.program[startPosition + 1];
+        final int index = (int) this.program[startPosition + 1];
 
         this.program[index] = inputValue;
 
@@ -35,7 +35,7 @@ public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
 
     @Override
     void output(int startPosition) {
-        int index = getValues(program[programCounter], new int[]{program[startPosition + 1]})[0];
+        long index = getValues(program[programCounter], new long[]{program[startPosition + 1]})[0];
 
         this.output.produce(index);
 

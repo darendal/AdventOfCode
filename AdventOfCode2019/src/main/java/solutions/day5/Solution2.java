@@ -8,7 +8,7 @@ package solutions.day5;
 import solutions.helpers.IntCode;
 
 public class Solution2 extends Solution1 {
-    private final int[] INPUT = {5};
+    private final long[] INPUT = {5};
 
     public Solution2() {
         super(2);
@@ -17,13 +17,13 @@ public class Solution2 extends Solution1 {
     @Override
     public void run() {
         this.printSolutionHeader();
-        int[] program = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
+        long[] program = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
 
         final IntCode ic = new IntCode(program, INPUT);
 
         ic.processIntcodeProgram();
 
-        int result = ic.getOutput().pop();
+        long result = ic.getOutput().pop();
 
         this.printResult(result);
 

@@ -6,38 +6,45 @@
 package solutions.helpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class IntCode {
 
-    int[] program;
-    private Stack<Integer> input;
-    private Stack<Integer> output;
+    long[] program;
     int programCounter;
 
-    IntCode() {
-    }
+    private Stack<Long> input;
+    private Stack<Long> output;
+    private Map<Long, Long> virtualMemoryMap;
+    private long relativeBase;
 
-    public IntCode(int[] program, int[] input) {
+
+    public IntCode(long[] program, long[] input) {
         this(program);
 
-        for (int i : input) {
+        for (long i : input) {
             this.input.push(i);
         }
     }
 
-    public IntCode(int[] program) {
+    public IntCode(long[] program) {
         this.program = program;
         this.programCounter = 0;
         this.input = new Stack<>();
         this.output = new Stack<>();
+
+        this.relativeBase = 0;
+
+        this.virtualMemoryMap = new HashMap<>();
     }
 
-    public int[] processIntcodeProgram() {
+    public long[] processIntcodeProgram() {
 
         while (true) {
-            switch (program[programCounter] % 100) {
+            switch ((int) (program[programCounter] % 100)) {
                 case 1:
                     addOpCode(programCounter);
                     break;
@@ -62,6 +69,9 @@ public class IntCode {
                 case 8:
                     equals(programCounter);
                     break;
+                case 9:
+                    relativeOffset(programCounter);
+                    break;
                 case 99:
                     // halt execution
                     return program;
@@ -71,67 +81,67 @@ public class IntCode {
         }
     }
 
-    public int[] processIntcodeProgram(int noun, int verb) {
+    public long[] processIntcodeProgram(int noun, int verb) {
         program[1] = noun;
         program[2] = verb;
 
         return processIntcodeProgram();
     }
 
-    public Stack<Integer> getOutput() {
+    public Stack<Long> getOutput() {
         return this.output;
     }
 
     private void addOpCode(int startPosition) {
 
-        int[] values = this.getValues(
+        long[] values = this.getValues(
                 program[programCounter],
-                new int[]{
+                new long[]{
                         program[startPosition + 1],
-                        program[startPosition + 2]
+                        program[startPosition + 2],
                 }
         );
 
-        int value1 = values[0];
-        int value2 = values[1];
-        int index = this.program[startPosition + 3];
+        long value1 = values[0];
+        long value2 = values[1];
+        long index = this.getAddress(program[programCounter], startPosition + 3, 3);
 
-        program[index] = value1 + value2;
+        this.writeToAddress(index, value1 + value2);
 
         programCounter += 4;
     }
 
     private void multiplyOpCode(int startPosition) {
-        int[] values = this.getValues(
+        long[] values = this.getValues(
                 program[programCounter],
-                new int[]{
+                new long[]{
                         program[startPosition + 1],
-                        program[startPosition + 2]
+                        program[startPosition + 2],
                 }
         );
 
-        int value1 = values[0];
-        int value2 = values[1];
-        int index = this.program[startPosition + 3];
+        long value1 = values[0];
+        long value2 = values[1];
+        long index = getAddress(program[programCounter], startPosition + 3, 3);
 
-        program[index] = value1 * value2;
+        this.writeToAddress(index, value1 * value2);
 
         programCounter += 4;
     }
 
     void input(int startPosition) {
 
-        int inputValue = this.input.pop();
-        int index = this.program[startPosition + 1];
+        long inputValue = this.input.pop();
+        long index = this.getAddress(this.getValueFromAddress(startPosition), startPosition + 1, 1);
 
-        this.program[index] = inputValue;
+        this.writeToAddress(index, inputValue);
 
         programCounter += 2;
     }
 
     void output(int startPosition) {
 
-        int index = getValues(program[programCounter], new int[]{program[startPosition + 1]})[0];
+        long index = getValues(program[programCounter], new long[]{program[startPosition + 1]})[0];
 
         this.output.push(index);
 
@@ -139,79 +149,123 @@ public class IntCode {
     }
 
     private void jumpIfTrue(int startPosition) {
-        final int[] values = this.getValues(program[programCounter], new int[]{
+        final long[] values = this.getValues(program[programCounter], new long[]{
                 program[startPosition + 1],
                 program[startPosition + 2]
         });
 
         if (values[0] != 0) {
-            this.programCounter = values[1];
+            this.programCounter = (int) values[1];
         } else {
             programCounter += 3;
         }
     }
 
     private void jumpIfFalse(int startPosition) {
-        final int[] values = this.getValues(program[programCounter], new int[]{
+        final long[] values = this.getValues(program[programCounter], new long[]{
                 program[startPosition + 1],
                 program[startPosition + 2]
         });
 
         if (values[0] == 0) {
-            this.programCounter = values[1];
+            this.programCounter = (int) values[1];
         } else {
             programCounter += 3;
         }
     }
 
     private void lessThan(int startPosition) {
-        final int[] values = this.getValues(program[programCounter], new int[]{
+        final long[] values = this.getValues(program[programCounter], new long[]{
                 program[startPosition + 1],
-                program[startPosition + 2]
+                program[startPosition + 2],
         });
 
-        int index = program[startPosition + 3];
+        long index = this.getAddress(program[programCounter], startPosition + 3, 3);
 
-        program[index] = values[0] < values[1] ? 1 : 0;
+        this.writeToAddress(index, values[0] < values[1] ? 1 : 0);
+
         programCounter += 4;
     }
 
     private void equals(int startPosition) {
-        final int[] values = this.getValues(program[programCounter], new int[]{
+        final long[] values = this.getValues(program[programCounter], new long[]{
                 program[startPosition + 1],
-                program[startPosition + 2]
+                program[startPosition + 2],
         });
 
-        int index = program[startPosition + 3];
+        long index = getAddress(program[programCounter], startPosition + 3, 3);
 
-        program[index] = values[0] == values[1] ? 1 : 0;
+        this.writeToAddress(index, values[0] == values[1] ? 1 : 0);
 
         programCounter += 4;
     }
 
-    int[] getValues(int opCode, int[] parameters) {
+    private void relativeOffset(int startPosition) {
+        final long[] values = this.getValues(program[startPosition], new long[]{
+                program[startPosition + 1],
+        });
+
+        this.relativeBase += values[0];
+
+        this.programCounter += 2;
+    }
+
+    long[] getValues(long opCode, long[] parameters) {
 
         char[] paramMode = (opCode + "").toCharArray();
 
-        List<Integer> results = new ArrayList<>(parameters.length);
+        List<Long> results = new ArrayList<>(parameters.length);
 
         for (int i = 0; i < parameters.length; i++) {
 
             int paramModeIndex = paramMode.length - 3 - i;
 
-            int value;
-            if (paramModeIndex < 0 || paramMode[paramModeIndex] == '0') {
+            long value;
+            if (paramModeIndex < 0 || paramMode[paramModeIndex] == '0') { // position mode
                 value = getValueFromAddress(parameters[i]);
-            } else {
+            } else if (paramMode[paramModeIndex] == '1') { // Immediate mode
                 value = parameters[i];
+            } else if (paramMode[paramModeIndex] == '2') { // Relative mode
+                value = getValueFromAddress(parameters[i] + relativeBase);
+            } else {
+                throw new IllegalArgumentException("Unknown parameter mode received: " + paramMode[paramModeIndex]);
             }
             results.add(value);
         }
 
-        return results.stream().mapToInt(i -> i).toArray();
+        return results.stream().mapToLong(i -> i).toArray();
     }
 
-    private int getValueFromAddress(int address) {
-        return program[address];
+    private long getValueFromAddress(long address) {
+        if (address > program.length) {
+            return this.virtualMemoryMap.getOrDefault(address, 0L);
+        } else {
+            return this.program[(int) address];
+        }
     }
+
+    private void writeToAddress(long address, long value) {
+        if (address > program.length) {
+            this.virtualMemoryMap.put(address, value);
+        } else {
+            this.program[(int) address] = value;
+        }
+    }
+
+    private long getAddress(long opCode, long position, long paramCount) {
+
+        char[] paramMode = (opCode + "").toCharArray();
+
+
+        int paramModeIndex = (int) (paramMode.length - 3 - paramCount + 1);
+
+        if (paramModeIndex < 0 || paramMode[paramModeIndex] == '0') {
+            return getValueFromAddress(position);
+        } else if (paramMode[paramModeIndex] == '2') {
+            return this.getValueFromAddress(position) + this.relativeBase;
+        } else {
+            throw new IllegalArgumentException("Unknown parameter mode received: " + paramMode[paramModeIndex]);
+        }
+    }
+
 }

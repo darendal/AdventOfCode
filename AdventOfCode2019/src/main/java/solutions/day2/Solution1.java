@@ -24,15 +24,15 @@ public class Solution1 extends AbstractSolution {
     public void run() {
         super.run();
 
-        int[] program = getProgram();
+        long[] program = getProgram();
 
-        int[] result = new IntCode(program).processIntcodeProgram(12, 1);
+        long[] result = new IntCode(program).processIntcodeProgram(12, 1);
 
         this.printResult(result[0]);
 
     }
 
-    int[] getProgram() {
+    long[] getProgram() {
         return this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
     }
 

@@ -26,7 +26,7 @@ public class Solution2 extends AbstractSolution {
 
     private static final String INPUT_FILENAME = "Input7";
     private static final int numAmps = 5;
-    private static final int[] PHASES = new int[]{5, 6, 7, 8, 9};
+    private static final long[] PHASES = new long[]{5, 6, 7, 8, 9};
 
     public Solution2() {
         super(2, 7);
@@ -38,17 +38,17 @@ public class Solution2 extends AbstractSolution {
 
         final ExecutorService executor = Executors.newFixedThreadPool(6);
 
-        final int[] memory = this.getIntCodeProgram(INPUT_FILENAME, Solution2.class);
+        final long[] memory = this.getIntCodeProgram(INPUT_FILENAME, Solution2.class);
 
-        final List<List<Integer>> phaseSettings = this.permute(PHASES);
+        final List<List<Long>> phaseSettings = this.permute(PHASES);
 
-        int maxAmp = 0;
+        long maxAmp = 0;
 
         try {
-            for (List<Integer> phases : phaseSettings) {
+            for (List<Long> phases : phaseSettings) {
 
-                final List<ProducerConsumer<Integer>> ampComms =
-                        Stream.generate((Supplier<ProducerConsumer<Integer>>) ProducerConsumer::new)
+                final List<ProducerConsumer<Long>> ampComms =
+                        Stream.generate((Supplier<ProducerConsumer<Long>>) ProducerConsumer::new)
                                 .limit(numAmps)
                                 .collect(Collectors.toList());
 
@@ -59,7 +59,7 @@ public class Solution2 extends AbstractSolution {
                     callable.add(new ConcurrentIntCode(memory.clone(), ampComms.get(i), ampComms.get((i + 1) % 5)));
                 }
 
-                ampComms.get(0).produce(0);
+                ampComms.get(0).produce(0L);
 
                 try {
                     List<Future<Integer>> futures = executor.invokeAll(callable);

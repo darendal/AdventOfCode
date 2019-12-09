@@ -53,24 +53,24 @@ public class AbstractSolution {
         System.out.println(String.format("Answer is %s", result));
     }
 
-    protected int[] getIntCodeProgram(String filename, Class clazz) {
+    protected long[] getIntCodeProgram(String filename, Class clazz) {
         String input = this.getInput(filename, clazz).get(0);
-        return Arrays.stream(input.split(",")).mapToInt(Integer::parseInt).toArray();
+        return Arrays.stream(input.split(",")).mapToLong(Long::parseLong).toArray();
     }
 
-    protected List<List<Integer>> permute(int[] arr) {
-        List<List<Integer>> list = new ArrayList<>();
+    protected List<List<Long>> permute(long[] arr) {
+        List<List<Long>> list = new ArrayList<>();
         permuteHelper(list, new ArrayList<>(), arr);
         return list;
     }
 
-    private void permuteHelper(List<List<Integer>> list, List<Integer> resultList, int[] arr) {
+    private void permuteHelper(List<List<Long>> list, List<Long> resultList, long[] arr) {
 
         // Base case
         if (resultList.size() == arr.length) {
             list.add(new ArrayList<>(resultList));
         } else {
-            for (int value : arr) {
+            for (long value : arr) {
 
                 if (resultList.contains(value)) {
                     // If element already exists in the list then skip

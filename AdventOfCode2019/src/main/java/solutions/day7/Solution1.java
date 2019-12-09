@@ -22,18 +22,18 @@ public class Solution1 extends AbstractSolution {
     public void run() {
         super.run();
 
-        final int[] memory = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
+        final long[] memory = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
 
-        final List<List<Integer>> phaseSettings = this.permute(new int[]{0, 1, 2, 3, 4});
+        final List<List<Long>> phaseSettings = this.permute(new long[]{0, 1, 2, 3, 4});
 
-        int maxAmp = 0;
+        long maxAmp = 0;
 
-        for (List<Integer> phases : phaseSettings) {
+        for (List<Long> phases : phaseSettings) {
 
-            int input = 0;
+            long input = 0;
             IntCode ic;
-            for (int phase : phases) {
-                ic = new IntCode(memory.clone(), new int[]{input, phase});
+            for (long phase : phases) {
+                ic = new IntCode(memory.clone(), new long[]{input, phase});
 
                 ic.processIntcodeProgram();
                 input = ic.getOutput().pop();

@@ -18,11 +18,11 @@ public class Solution2 extends Solution1 {
     public void run() {
         this.printSolutionHeader();
 
-        final int[] memory = this.getProgram();
+        final long[] memory = this.getProgram();
 
         for (int noun = 0; noun <= 99; noun++) {
             for (int verb = 0; verb <= 99; verb++) {
-                int[] program = memory.clone();
+                long[] program = memory.clone();
 
                 program = new IntCode(program).processIntcodeProgram(noun, verb);
 
