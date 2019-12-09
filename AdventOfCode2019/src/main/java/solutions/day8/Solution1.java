@@ -55,9 +55,16 @@ public class Solution1 extends AbstractSolution {
     }
 
     class Layer {
-        int width;
-        int height;
-        int[][] layer;
+
+        private static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+        private static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+        private static final String ANSI_RESET = "\u001B[0m";
+
+        private static final String TEMPLATE = "%s %s";
+
+        private int width;
+        private int height;
+        private int[][] layer;
 
         private int[] countMap;
 
@@ -133,5 +140,15 @@ public class Solution1 extends AbstractSolution {
             return new Layer(this.width, this.height, result);
         }
 
+        void print() {
+            for (int i = 0; i < this.height; i++) {
+                for (int j = 0; j < this.width; j++) {
+                    System.out.print(String.format(TEMPLATE,
+                            this.layer[i][j] == 0 ? ANSI_BLACK_BACKGROUND : ANSI_WHITE_BACKGROUND,
+                            ANSI_RESET));
+                }
+                System.out.println();
+            }
+        }
     }
 }

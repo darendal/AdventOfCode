@@ -5,8 +5,6 @@
 
 package solutions.day9;
 
-import java.util.Stack;
-
 import solutions.AbstractSolution;
 import solutions.helpers.IntCode;
 
@@ -29,14 +27,12 @@ public class Solution1 extends AbstractSolution {
     public void run() {
         super.run();
 
-        long[] program = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
+        final long[] program = this.getIntCodeProgram(INPUT_FILENAME, Solution1.class);
 
         final IntCode ic = new IntCode(program, new long[]{input});
 
         ic.processIntcodeProgram();
 
-        Stack<Long> output = ic.getOutput();
-
-        System.out.println(output);
+        this.printResult(ic.getOutput());
     }
 }
