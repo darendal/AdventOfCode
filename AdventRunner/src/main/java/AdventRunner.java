@@ -13,6 +13,6 @@ public class AdventRunner {
         final SolutionList solutionList = new Solutions2019();
         //final SolutionList solutionList = new Solutions2018();
 
-        solutionList.runAll();
+        solutionList.runLast();
     }
 }
