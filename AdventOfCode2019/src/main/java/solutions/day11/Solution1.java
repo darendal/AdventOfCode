@@ -155,9 +155,9 @@ public class Solution1 extends AbstractSolution {
             Future<Integer> f = executor.submit(cpu);
 
             Future<int[][]> futureHull = executor.submit(() -> {
-                int[][] hull = new int[8][45];
-                int x = 1;
-                int y = 1;
+                int[][] hull = new int[6][43];
+                int x = 0;
+                int y = 0;
 
                 // Start on white
                 hull[x][y] = 1;
@@ -220,7 +220,6 @@ public class Solution1 extends AbstractSolution {
 
             return result;
         }
-
 
     }
 }
