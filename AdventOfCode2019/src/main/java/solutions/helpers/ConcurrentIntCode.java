@@ -26,9 +26,9 @@ public class ConcurrentIntCode extends IntCode implements Callable<Integer> {
 
         final long inputValue = this.input.consume();
 
-        final int index = (int) this.program[startPosition + 1];
+        long index = this.getAddress(this.getValueFromAddress(startPosition), startPosition + 1, 1);
 
-        this.program[index] = inputValue;
+        this.writeToAddress(index, inputValue);
 
         programCounter += 2;
     }

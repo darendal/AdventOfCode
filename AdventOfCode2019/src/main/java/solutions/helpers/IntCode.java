@@ -236,23 +236,15 @@ public class IntCode {
         return results.stream().mapToLong(i -> i).toArray();
     }
 
-    private long getValueFromAddress(long address) {
-        if (address > program.length) {
-            return this.virtualMemoryMap.getOrDefault(address, 0L);
-        } else {
-            return this.program[(int) address];
-        }
-    }
-
-    private void writeToAddress(long address, long value) {
-        if (address > program.length) {
+    void writeToAddress(long address, long value) {
+        if (address >= program.length) {
             this.virtualMemoryMap.put(address, value);
         } else {
             this.program[(int) address] = value;
         }
     }
 
-    private long getAddress(long opCode, long position, long paramCount) {
+    long getAddress(long opCode, long position, long paramCount) {
 
         char[] paramMode = (opCode + "").toCharArray();
 
@@ -265,6 +257,14 @@ public class IntCode {
             return this.getValueFromAddress(position) + this.relativeBase;
         } else {
             throw new IllegalArgumentException("Unknown parameter mode received: " + paramMode[paramModeIndex]);
+        }
+    }
+
+    long getValueFromAddress(long address) {
+        if (address >= program.length) {
+            return this.virtualMemoryMap.getOrDefault(address, 0L);
+        } else {
+            return this.program[(int) address];
         }
     }
 
