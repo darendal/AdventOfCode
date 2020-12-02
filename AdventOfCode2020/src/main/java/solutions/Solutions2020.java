@@ -14,7 +14,9 @@ public class Solutions2020 extends AbstractSolutionList {
     public Solutions2020() {
         super(Arrays.asList(
                 new Solution1(),
-                new Solution2()
+                new Solution2(),
+                new solutions.day2.Solution1(),
+                new solutions.day2.Solution2()
         ));
     }
 }
