@@ -32,12 +32,11 @@ public class AbstractSolution {
     }
 
     protected void printSolutionHeader() {
-        System.out.println(String.format("\n\n====== Running Solution #%s for day %s ======\n\n", solutionNumber, dayNumber));
+        System.out.printf("\n\n====== Running Solution #%s for day %s ======\n\n%n", solutionNumber, dayNumber);
     }
 
-    protected List<String> getInput(final String filename, Class clazz) throws IllegalArgumentException {
-
-        InputStream i = clazz.getClassLoader().getSystemResourceAsStream(filename);
+    protected List<String> getInput(final String filename) throws IllegalArgumentException {
+        InputStream i = ClassLoader.getSystemResourceAsStream(filename);
 
         if (i == null) {
             throw new IllegalArgumentException("file not found");
@@ -46,11 +45,19 @@ public class AbstractSolution {
         BufferedReader r = new BufferedReader(new InputStreamReader(i));
 
         return r.lines().collect(Collectors.toList());
+    }
 
+    protected  List<String> getInput() throws IllegalArgumentException {
+        return this.getInput("input" + this.dayNumber);
+    }
+
+    @Deprecated
+    protected List<String> getInput(final String filename, Class clazz) throws IllegalArgumentException {
+       return getInput(filename);
     }
 
     protected <T> void printResult(final T result) {
-        System.out.println(String.format("Answer is %s", result));
+        System.out.printf("Answer is %s%n", result);
     }
 
     protected long[] getIntCodeProgram(String filename, Class clazz) {
