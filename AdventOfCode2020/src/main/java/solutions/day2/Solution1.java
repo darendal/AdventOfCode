@@ -4,14 +4,9 @@
  */
 package solutions.day2;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import solutions.AbstractSolution;
 
 public class Solution1 extends AbstractSolution {
-
-    private static final String INPUT_FILENAME = "input2";
 
     public Solution1() {
         super(1, 2);
@@ -21,7 +16,7 @@ public class Solution1 extends AbstractSolution {
     public void run() {
         super.run();
 
-        final long validPasswords = this.getInput(INPUT_FILENAME, this.getClass())
+        final long validPasswords = this.getInput()
                 .stream()
                 .map(input -> input.split(" "))
                 .map(this::evaluatePassword)
