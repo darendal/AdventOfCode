@@ -16,8 +16,7 @@ public class Solution1 extends AbstractSolution {
     public void run() {
         super.run();
 
-        final long validPasswords = this.getInput()
-                .stream()
+        final long validPasswords = this.getInputStream()
                 .map(input -> input.split(" "))
                 .map(this::evaluatePassword)
                 .filter(pass -> pass)

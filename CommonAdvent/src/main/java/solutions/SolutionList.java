@@ -12,4 +12,6 @@ public interface SolutionList {
     void runLast();
 
     void runSingleDay(int day);
+
+    void runSingleDayWithTimer(int day);
 }

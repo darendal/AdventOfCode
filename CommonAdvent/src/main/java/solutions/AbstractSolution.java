@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AbstractSolution {
 
@@ -36,6 +37,10 @@ public class AbstractSolution {
     }
 
     protected List<String> getInput(final String filename) throws IllegalArgumentException {
+       return this.getInputStream(filename).collect(Collectors.toList());
+    }
+
+    protected Stream<String> getInputStream(final String filename) {
         InputStream i = ClassLoader.getSystemResourceAsStream(filename);
 
         if (i == null) {
@@ -44,7 +49,11 @@ public class AbstractSolution {
 
         BufferedReader r = new BufferedReader(new InputStreamReader(i));
 
-        return r.lines().collect(Collectors.toList());
+        return r.lines();
+    }
+
+    protected Stream<String> getInputStream() {
+        return this.getInputStream("input" + this.dayNumber);
     }
 
     protected  List<String> getInput() throws IllegalArgumentException {

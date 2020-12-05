@@ -5,6 +5,8 @@
 
 package solutions;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 public class AbstractSolutionList implements SolutionList {
@@ -17,19 +19,35 @@ public class AbstractSolutionList implements SolutionList {
 
     @Override
     public void runAll() {
-        long startTime = System.currentTimeMillis();
-        solutionList.forEach(AbstractSolution::run);
-        System.out.println("\nTime taken : " + (System.currentTimeMillis() - startTime) + " millisecond(s).");
+        solutionList.forEach(this::runWithTimer);
     }
 
     @Override
     public void runLast() {
-
-        this.solutionList.get(solutionList.size() - 1).run();
+        this.runWithTimer(this.solutionList.get(solutionList.size() - 1));
     }
 
     @Override
     public void runSingleDay(int day) {
-        solutionList.stream().filter(s -> s.getDayNumber() == day).forEach(AbstractSolution::run);
+        solutionList
+                .stream()
+                .filter(s -> s.getDayNumber() == day)
+                .forEach(AbstractSolution::run);
+    }
+
+    @Override
+    public void runSingleDayWithTimer(int day) {
+
+        solutionList
+                .stream()
+                .filter(s -> s.getDayNumber() == day)
+                .forEach(this::runWithTimer);
+    }
+
+    private void runWithTimer(final AbstractSolution solution) {
+        Instant start = Instant.now();
+        solution.run();
+        Instant end = Instant.now();
+        System.out.printf( "Execution took %s ms" , Duration.between(start, end).toMillis());
     }
 }

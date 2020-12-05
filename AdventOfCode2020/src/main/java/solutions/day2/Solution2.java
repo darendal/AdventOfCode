@@ -8,8 +8,6 @@ import solutions.AbstractSolution;
 
 public class Solution2 extends AbstractSolution {
 
-    private static final String INPUT_FILENAME = "input2";
-
     public Solution2() {
         super(2, 2);
     }
@@ -18,8 +16,7 @@ public class Solution2 extends AbstractSolution {
     public void run() {
         super.run();
 
-        final long validPasswords = this.getInput(INPUT_FILENAME, this.getClass())
-                .stream()
+        final long validPasswords = this.getInputStream()
                 .map(input -> input.split(" "))
                 .map(this::evaluatePassword)
                 .filter(pass -> pass)
