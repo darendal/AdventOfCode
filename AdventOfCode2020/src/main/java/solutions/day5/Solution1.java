@@ -32,27 +32,14 @@ public class Solution1  extends AbstractSolution {
 
     protected long getSeatId(final String seatCode) {
 
-        final long rowIndex = binarySpacePartition(seatCode.substring(0,7), 0, 127, 'B', 'F');
-        final long columnIndex = binarySpacePartition(seatCode.substring(7), 0, 7, 'R', 'L');
+        final long rowIndex = binarySpacePartition(seatCode.substring(0,7), 'B', 'F');
+        final long columnIndex = binarySpacePartition(seatCode.substring(7), 'R', 'L');
 
         return rowIndex * 8 + columnIndex;
     }
 
-    private long binarySpacePartition(final String instructions, final int lowStart, final int highStart, final char highChar, final char lowChar) {
-        double low = lowStart;
-        double high = highStart;
-
-        for (char c: instructions.toCharArray()) {
-
-            double temp = (high + low) / 2D;
-            if ( c == lowChar) {
-                high = Math.floor(temp);
-            } else if (c == highChar) {
-                low = Math.ceil(temp);
-            }
-        }
-
-        return instructions.charAt(instructions.length() - 1) == highChar ? (long)high : (long)low;
+    private long binarySpacePartition(final String instructions, final char highChar, final char lowChar) {
+        return Integer.parseInt(instructions.replace(lowChar, '0').replace(highChar, '1'), 2);
     }
 
 }
