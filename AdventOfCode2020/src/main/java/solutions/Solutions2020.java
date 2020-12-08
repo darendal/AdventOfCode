@@ -26,7 +26,9 @@ public class Solutions2020 extends AbstractSolutionList {
                 new solutions.day6.Solution1(),
                 new solutions.day6.Solution2(),
                 new solutions.day7.Solution1(),
-                new solutions.day7.Solution2()
+                new solutions.day7.Solution2(),
+                new solutions.day8.Solution1(),
+                new solutions.day8.Solution2()
         ));
     }
 }
