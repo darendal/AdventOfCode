@@ -67,7 +67,6 @@ def part_2():
     print(sum([interpret_line(x) for x in data]))
 
 
-
 def main():
     part_1()
     part_2()
