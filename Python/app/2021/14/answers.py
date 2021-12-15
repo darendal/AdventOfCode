@@ -1,75 +1,78 @@
-from collections import Counter
+from collections import defaultdict
 
 from common.utils import get_input
 
 
 class PolymerChain:
     class Node:
-        def __init__(self, value: str, next=None, prev=None):
+        def __init__(self, value: str):
             self.value = value
-            self.next = next
-            self.prev = prev
+            self.neighbors = defaultdict(int)
+
+        def add_neighbor(self, neighbor, count: int = 1):
+            self.neighbors[neighbor] += count
+
+        def remove_neighbor(self, neighbor, count: int = 1):
+            self.neighbors[neighbor] -= count
+
+            if self.neighbors[neighbor] <= 0:
+                self.neighbors.pop(neighbor)
 
     def __init__(self, data):
-        self.head = None
+        self.first = data[0][0]
+        self.nodes = {}
         prev = None
         for v in data[0]:
-            n = PolymerChain.Node(v)
-
-            if not self.head:
-                self.head = n
+            if prev is None:
+                prev = PolymerChain.Node(v)
+                self.nodes[v] = prev
             else:
-                prev.next = n
-                n.prev = prev
-
-            prev = n
-
-        self.count = len(data[0])
+                if v not in self.nodes:
+                    self.nodes[v] = PolymerChain.Node(v)
+                prev.add_neighbor(v)
+                prev = self.nodes[v]
 
         self.rules = {}
         for k, val in [x.split(" -> ") for x in data[2:]]:
             self.rules[k] = val
 
     def transform(self):
+        valid_pairs = defaultdict(int)
+        for n in self.nodes.values():
+            for k, v in n.neighbors.items():
+                key = n.value + k
+                if key in self.rules:
+                    valid_pairs[key] += v
 
-        current = self.head
-        while current.next:
-            chain = current.value + current.next.value
+        for pair, number in valid_pairs.items():
+            product = self.rules[pair]
 
-            if chain in self.rules:
-                new_node = PolymerChain.Node(self.rules[chain], next=current.next, prev=current)
-                tmp = current.next
+            left, right = pair
 
-                current.next = new_node
-                tmp.prev = new_node
-                current = tmp
+            if product not in self.nodes:
+                self.nodes[product] = PolymerChain.Node(product)
 
-                self.count += 1
-            else:
-                current = current.next
+            self.nodes[left].remove_neighbor(right, number)
+            self.nodes[left].add_neighbor(product, number)
+            self.nodes[product].add_neighbor(right, number)
 
     def generate_stats(self):
 
-        return Counter(str(self))
+        vals = {}
+        counts = [x.neighbors for x in self.nodes.values()]
 
-    def __str__(self):
-        ret = []
+        for i in self.nodes.keys():
+            vals[i] = sum(x[i] if i in x else 0 for x in counts)
 
-        current = self.head
-        while current:
-            ret.append(current.value)
-            current = current.next
-        return "".join(ret)
+        vals[self.first] += 1
+        return vals
 
 
 def simulate_polymer(steps: int):
     p = PolymerChain(get_input())
+    [p.transform() for _ in range(steps)]
 
-    for _ in range(steps):
-        p.transform()
-
-    stats = p.generate_stats()
-    sorted_stats = sorted(stats.values(), reverse=True)
+    sorted_stats = sorted(p.generate_stats().values(), reverse=True)
     print(sorted_stats[0] - sorted_stats[-1])
 
 
@@ -83,7 +86,7 @@ def part_2():
 
 def main():
     part_1()
-    #part_2()
+    part_2()
 
 
 if __name__ == "__main__":
