@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 bitstring = "*"
 numpy = "*"
+bitarray = "*"
 
 [dev-packages]
 
